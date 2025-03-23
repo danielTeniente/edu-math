@@ -1,6 +1,6 @@
 import streamlit as st
 import numpy as np
-import plotly.graph_objects as go
+import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="Descartes y El Plano Cartesiano", page_icon="📐")
 
@@ -29,7 +29,7 @@ visualizar las ecuaciones y jugar con ellas.
        
 \* *Nota: Esto me recuerda a Newton, quien consideraba la física como un pasatiempo 
 y la biblia como su vocación. En el caso de Descartes, su vocación era el pensamiento
-y la avogacía una mera excusa.* 
+y la abogacía una mera excusa.* 
 """
 )
 
@@ -84,78 +84,32 @@ with col3:
     y_point_c = st.slider("Y del punto C", -10, 10, -2)
 
 
-# Crear el plano cartesiano con Plotly
-fig = go.Figure()
+# Crear el plano cartesiano con Matplotlib
+fig, ax = plt.subplots(figsize=(8, 6))
+
+# Configurar el aspecto del plano
+ax.set_xlim(-10, 10)
+ax.set_ylim(-10, 10)
+ax.grid(True, linestyle='--', alpha=0.7)
+ax.axhline(y=0, color='k', linestyle='-', linewidth=1)
+ax.axvline(x=0, color='k', linestyle='-', linewidth=1)
+ax.set_aspect('equal')
 
 # Agregar los tres puntos con diferentes colores y etiquetas
-fig.add_trace(go.Scatter(
-    x=[x_point_a],
-    y=[y_point_a],
-    mode='markers+text',
-    name='Punto A',
-    text=['A'],
-    textposition='top center',
-    marker=dict(size=12, color='red'),
-    showlegend=True
-))
+ax.scatter(x_point_a, y_point_a, color='red', s=100, label='Punto A')
+ax.text(x_point_a, y_point_a + 0.5, 'A', ha='center', va='bottom')
 
-fig.add_trace(go.Scatter(
-    x=[x_point_b],
-    y=[y_point_b],
-    mode='markers+text',
-    name='Punto B',
-    text=['B'],
-    textposition='top center',
-    marker=dict(size=12, color='blue'),
-    showlegend=True
-))
+ax.scatter(x_point_b, y_point_b, color='blue', s=100, label='Punto B')
+ax.text(x_point_b, y_point_b + 0.5, 'B', ha='center', va='bottom')
 
-fig.add_trace(go.Scatter(
-    x=[x_point_c],
-    y=[y_point_c],
-    mode='markers+text',
-    name='Punto C',
-    text=['C'],
-    textposition='top center',
-    marker=dict(size=12, color='green'),
-    showlegend=True
-))
+ax.scatter(x_point_c, y_point_c, color='green', s=100, label='Punto C')
+ax.text(x_point_c, y_point_c + 0.5, 'C', ha='center', va='bottom')
 
-# Configurar el aspecto del plano con ejes más visibles
-fig.update_layout(
-    title="Plano Cartesiano",
-    xaxis=dict(
-        title="Eje X",
-        zeroline=True,
-        zerolinewidth=2,
-        zerolinecolor='black',
-        gridcolor='lightgray',
-        range=[-10, 10],
-        showline=True,
-        linewidth=2,
-        linecolor='black',
-        mirror=True
-    ),
-    yaxis=dict(
-        title="Eje Y",
-        zeroline=True,
-        zerolinewidth=2,
-        zerolinecolor='black',
-        gridcolor='lightgray',
-        range=[-10, 10],
-        showline=True,
-        linewidth=2,
-        linecolor='black',
-        mirror=True,
-        scaleanchor='x',
-        scaleratio=1
-    ),
-    showlegend=True,
-    width=700,
-    height=500,
-    plot_bgcolor='white',
-    margin=dict(l=50, r=50, t=50, b=100)
-)
+# Configurar etiquetas y título
+ax.set_xlabel('Eje X')
+ax.set_ylabel('Eje Y')
+ax.set_title('Plano Cartesiano')
+ax.legend()
 
 # Crear dos columnas para el plot y las coordenadas
 col1, col2 = st.columns([1, 2])
@@ -171,7 +125,7 @@ with col1:
 
 # Mostrar el plano en la segunda columna
 with col2:
-    st.plotly_chart(fig)
+    st.pyplot(fig)
 
 # Ejercicios interactivos
 st.header("Ejercicios Interactivos")
